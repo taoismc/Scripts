@@ -1,0 +1,16 @@
+#!/bin/bash
+
+SRC_DIR=/tmp/tmp/
+DST_DIR=/root/tmp/
+
+inotifywait -mrq --timefmt '%y/%m/%d %H:%M:%S' --format  '%T %w%f %e' --event close $SRC_DIR | while read date time file event
+  do
+      echo $event
+      date +%Y-%m-%d' '%H:%M:%S.%N | cut -b 1-23
+      if [[ "$event" == "CLOSE_WRITE,CLOSE" ]]
+      then
+           mv $file $DST_DIR
+           echo "moved  $file"
+      fi
+      date +%Y-%m-%d' '%H:%M:%S.%N | cut -b 1-23
+  done
